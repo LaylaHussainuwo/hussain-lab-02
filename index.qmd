@@ -1,0 +1,255 @@
+---
+title: "9041 Assignment 2"
+author: Layla Hussain
+date: today
+format: 
+    html:
+      toc: true
+      code-fold: true
+      code-summary: "Show code"
+      df-print: paged
+execute:
+    echo: false
+    warning: false
+---
+
+```{r packages}
+#| output: FALSE
+
+library(tidyverse)
+library(readxl)
+library(psych)
+library(gt)
+library(janitor)
+
+```
+
+```{r loading data}
+#| output: FALSE
+
+data <- read_excel("./Attachment_Anxiety_Data.xlsx")
+
+head(data)
+
+```
+
+```{r, data cleaning}
+#| output: FALSE
+
+# Assigning more informative labels for gender and relationship. Plus, changing all survey responses to integers. 
+
+attachment_clean <- data |> 
+  mutate(Gender = case_when(Gender == 1 ~ "Male", Gender == 2 ~ "Female")) |>
+  
+  mutate(Relationship = case_when(Relationship == 1 ~ "Married",
+                                  Relationship == 2 ~ "In a relationship",
+                                  Relationship == 4 ~ "Divorced",
+                                  Relationship == 5 ~ "In a relationship",
+                                  Relationship == 6 ~ "Never in a relationship",
+                                  Relationship == 7 ~ "Prefer not to say",)) |>
+  
+    mutate_at(7:45, as.integer)
+
+```
+
+```{r, score items}
+#| output: FALSE
+
+#SA = Social Interaction Anxiety Scale Question 1 = social_anxiety 
+#AA = Experiences in Close Relationships Anxiety Subscale Question 1 = relationships_subscale
+#SEst = Rosenberg Self-Esteem Scale Question 1 = rosenberg
+
+keys <- list(
+              social_anxiety = c("SA_1", "SA_2", "SA_3", "SA_4", "-SA_5", "SA_6", "SA_7", "SA_8", "-SA_9", "SA_10", "-SA_11", "SA_12", "SA_13", "SA_14", "SA_15", "SA_16", "SA_17", "SA_18", "SA_19", "SA_20"),
+             
+              relationships_subscale = c("AA_1", "-AA_2", "AA_3", "AA_4", "-AA_5", "-AA_6", "AA_7", "-AA_8", "-AA_9"),
+             
+             rosenberg = c("SEst_1", "SEst_2", "SEst_3", "SEst_4", "SEst_5", "SEst_6", "SEst_7", "SEst_8", "SEst_9", "SEst_10"))
+
+social_anxiety_scores <- scoreItems(keys["social_anxiety"], attachment_clean, totals = F, min = 0, max = 4)
+
+relationships_subscale_scores <- scoreItems(keys["relationships_subscale"], attachment_clean, totals = F, min = 1, max = 7)
+
+rosenberg_scores <- scoreItems(keys["rosenberg"], attachment_clean, totals = F, min = 1, max = 4)
+
+social_anxiety_df <- as.data.frame(social_anxiety_scores$scores)
+relationships_subscale_df <- as.data.frame(relationships_subscale_scores$scores)
+rosenberg_df <- as.data.frame(rosenberg_scores$scores)
+
+allscores_df <- cbind(social_anxiety_df, relationships_subscale_df, rosenberg_df)
+
+```
+
+```{r, combine data frames}
+#| output: FALSE
+
+attachment_clean <- cbind(attachment_clean, allscores_df)
+
+head(attachment_clean)
+
+```
+
+```{r, reduced data}
+#| output: FALSE
+
+attachment_final <- attachment_clean |>
+  select("Gender", "Relationship", "social_anxiety", "relationships_subscale", "rosenberg")|>
+  mutate_if(is.numeric, round, 2)
+  
+```
+
+```{r, reproducible table for relationship type distribution}
+#| output: FALSE
+
+demo_table <- attachment_final |>
+  tabyl(Gender, Relationship)
+
+gttable <- demo_table |>
+  gt() |>
+  tab_header(
+    title = md("*Distribution of Relationship Status by Gender*")
+  )
+
+print(gttable)
+
+
+```
+
+```{r, reproducible table for attachment new dataframe}
+#| output: FALSE
+
+# Cronbach alpha to 2 decimal places
+alphas <- c(
+  social_anxiety = social_anxiety_scores$alpha,
+  relationships = relationships_subscale_scores$alpha,
+  rosenberg = rosenberg_scores$alpha
+)
+
+alphas <- round(alphas, 2)
+
+# Summary statistics
+summary <- describe(select(attachment_final, social_anxiety:rosenberg))
+
+# Label sample size 
+n <- (describe(attachment_final))[1,2]
+
+Scales <- c(
+  "Social Interaction Anxiety Scale",
+  "Experiences in Close Relationships Anxiety Subscale",
+  "Rosenberg Self-Esteem Scale"
+)
+
+summary$Scales <- Scales
+
+summary <- summary |>
+  select(Scales, mean, median, sd, range) |>
+  mutate_if(is.numeric, round, 2)
+
+summary$alpha <- alphas
+
+gttable.2 <- gt(summary) |>
+  tab_header(
+    title = md("*Descriptive Statistics for Three Scales Assessing Attachment and Social Anxiety*")
+  )|>
+    cols_label(
+        mean = "Mean",
+        median = "Median",
+        sd = "SD",
+        range = "Range",
+        alpha = "Cronbach's Alpha")
+
+print(gttable.2)
+
+```
+
+
+```{r, filtered dataset}
+#| output: FALSE
+
+attachment_filt <- attachment_final |>
+    filter(Gender == "Female")
+
+# Checking
+table(attachment_filt$Gender) 
+
+```
+
+```{r, reproducible table for FILTERED attachment new dataframe}
+#| output: FALSE
+
+# Cronbach alpha to 2 decimal places
+
+filt_alphas <- c(
+  social_anxiety = social_anxiety_scores$alpha,
+  relationships = relationships_subscale_scores$alpha,
+  rosenberg = rosenberg_scores$alpha
+)
+
+filt_alphas <- round(filt_alphas, 2)
+
+# Summary statistics
+filt_summary <- describe(select(attachment_filt, social_anxiety:rosenberg))
+
+# Label sample size 
+n <- (describe(attachment_filt))[1,2]
+
+Scales <- c(
+  "Social Interaction Anxiety Scale",
+  "Experiences in Close Relationships Anxiety Subscale",
+  "Rosenberg Self-Esteem Scale"
+)
+
+filt_summary$Scales <- Scales
+
+filt_summary <- filt_summary |>
+  select(Scales, mean, median, sd, range) |>
+  mutate_if(is.numeric, round, 2)
+
+filt.reptable <- cbind(filt_summary, filt_alphas)
+
+gttable.3 <- gt(filt.reptable) |>
+  tab_header(
+    title = md("*Descriptive Statistics for Women's Responses to Three Scales Assessing Attachment and Social Anxiety*")
+  )|>
+    cols_label(
+        mean = "Mean",
+        median = "Median",
+        sd = "SD",
+        range = "Range",
+        filt_alphas = "Cronbach's Alpha")
+
+print(gttable.3)
+
+```
+
+## Intro
+
+## Methods
+
+### Participants
+
+In this data set there were `{r} n` participants, with varying distributions of education type (Table 1).
+
+`{r} gttable`
+
+### Measures
+
+In this Attachment and social anxiety dataset, there are responses to three scales. They are 1) The Social Interaction Anxiety Scale which measures individual's anxiety during social interaction (Cronbach's alpha = `{r} alphas[1]`). 2) The subscale of the Experiences in Close Relationships Scale which measures individual's anxiety in relationships (Cronbach's alpha = `{r} alphas[2]`). 3) The Rosenberg Self-Esteem Scale which measures self-worth (Cronbach's alpha = `{r} alphas[3]`). 
+
+### Data Analysis Strategy
+
+To correctly assess responses, items 5, 9, and 11 from the Social Interaction Anxiety Scale, and items 2, 5, 6, 8, and 9 from the Rosenberg Self-Esteem Scale were reverse keyed. 
+
+## Results
+
+`{r} gttable.2`
+
+This table (Table 2) presents the mean, median, standard deviation, range, and Cronbach’s alpha for each scale in the full sample. Participants had a mean social interaction anxiety score of `{r} summary[1,2]`, a mean relationship anxiety score of `{r} summary[2,2]`, and a mean self-esteem score of `{r} summary[3,2]`.
+
+`{r} gttable.3`
+
+
+This table (Table 3) presents the mean, median, standard deviation, range, and Cronbach’s alpha for each scale, this time, the data are filtered to only show responses from Female participants. Female participants had a mean social interaction anxiety score of `{r} filt_summary[1,2]`, a mean relationship anxiety score of `{r} filt_summary[2,2]`, and a mean self-esteem score of `{r} filt_summary[3,2]`.
+
+
+## Discussion

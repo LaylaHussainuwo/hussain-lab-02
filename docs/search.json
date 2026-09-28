@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "index.html#methods",
+    "href": "index.html#methods",
+    "title": "9041 Assignment 2",
+    "section": "Methods",
+    "text": "Methods\n\nParticipants\nIn this data set there were 50 participants, with varying distributions of education type (Table 1).\n\n\n\n\n\n\nDistribution of Relationship Status by Gender\n\n\nGender\nDivorced\nIn a relationship\nMarried\nNever in a relationship\nPrefer not to say\n\n\n\n\nFemale\n0\n43\n4\n1\n2\n\n\nMale\n1\n11\n0\n0\n1\n\n\n\n\n\n\n\nMeasures\nIn this Attachment and social anxiety dataset, there are responses to three scales. They are 1) The Social Interaction Anxiety Scale which measures individual’s anxiety during social interaction (Cronbach’s alpha = 0.9). 2) The subscale of the Experiences in Close Relationships Scale which measures individual’s anxiety in relationships (Cronbach’s alpha = -3.58). 3) The Rosenberg Self-Esteem Scale which measures self-worth (Cronbach’s alpha = 0.25).\n\n\nData Analysis Strategy\nTo correctly assess responses, items 5, 9, and 11 from the Social Interaction Anxiety Scale, and items 2, 5, 6, 8, and 9 from the Rosenberg Self-Esteem Scale were reverse keyed."
+  },
+  {
+    "objectID": "index.html#results",
+    "href": "index.html#results",
+    "title": "9041 Assignment 2",
+    "section": "Results",
+    "text": "Results\n\n\n\n\n\n\nDescriptive Statistics for Three Scales Assessing Attachment and Social Anxiety\n\n\nScales\nMean\nMedian\nSD\nRange\nCronbach's Alpha\n\n\n\n\nSocial Interaction Anxiety Scale\n2.39\n2.3\n0.70\n3.00\n0.90\n\n\nExperiences in Close Relationships Anxiety Subscale\n3.99\n4.0\n0.32\n1.22\n-3.58\n\n\nRosenberg Self-Esteem Scale\n2.18\n2.2\n0.28\n1.30\n0.25\n\n\n\n\n\nThis table (Table 2) presents the mean, median, standard deviation, range, and Cronbach’s alpha for each scale in the full sample. Participants had a mean social interaction anxiety score of 2.39, a mean relationship anxiety score of 3.99, and a mean self-esteem score of 2.18.\n\n\n\n\n\n\nDescriptive Statistics for Women’s Responses to Three Scales Assessing Attachment and Social Anxiety\n\n\nScales\nMean\nMedian\nSD\nRange\nCronbach's Alpha\n\n\n\n\nSocial Interaction Anxiety Scale\n2.44\n2.38\n0.72\n3.00\n0.90\n\n\nExperiences in Close Relationships Anxiety Subscale\n4.00\n4.00\n0.33\n1.22\n-3.58\n\n\nRosenberg Self-Esteem Scale\n2.20\n2.20\n0.28\n1.30\n0.25\n\n\n\n\n\nThis table (Table 3) presents the mean, median, standard deviation, range, and Cronbach’s alpha for each scale, this time, the data are filtered to only show responses from Female participants. Female participants had a mean social interaction anxiety score of 2.44, a mean relationship anxiety score of 4, and a mean self-esteem score of 2.2."
+  },
+  {
+    "objectID": "index.html#discussion",
+    "href": "index.html#discussion",
+    "title": "9041 Assignment 2",
+    "section": "Discussion",
+    "text": "Discussion"
+  }
+]
