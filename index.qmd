@@ -62,9 +62,9 @@ attachment_clean <- data |>
 keys <- list(
               social_anxiety = c("SA_1", "SA_2", "SA_3", "SA_4", "-SA_5", "SA_6", "SA_7", "SA_8", "-SA_9", "SA_10", "-SA_11", "SA_12", "SA_13", "SA_14", "SA_15", "SA_16", "SA_17", "SA_18", "SA_19", "SA_20"),
              
-              relationships_subscale = c("AA_1", "-AA_2", "AA_3", "AA_4", "-AA_5", "-AA_6", "AA_7", "-AA_8", "-AA_9"),
+              relationships_subscale = c("AA_1", "AA_2", "AA_3", "AA_4", "AA_5", "AA_6", "AA_7", "AA_8", "AA_9"),
              
-             rosenberg = c("SEst_1", "SEst_2", "SEst_3", "SEst_4", "SEst_5", "SEst_6", "SEst_7", "SEst_8", "SEst_9", "SEst_10"))
+             rosenberg = c("SEst_1", "-SEst_2", "SEst_3", "SEst_4", "-SEst_5", "-SEst_6", "SEst_7", "-SEst_8", "-SEst_9", "SEst_10"))
 
 social_anxiety_scores <- scoreItems(keys["social_anxiety"], attachment_clean, totals = F, min = 0, max = 4)
 
@@ -120,18 +120,18 @@ print(gttable)
 
 # Cronbach alpha to 2 decimal places
 alphas <- c(
-  social_anxiety = social_anxiety_scores$alpha,
-  relationships = relationships_subscale_scores$alpha,
-  rosenberg = rosenberg_scores$alpha
+  t(round(social_anxiety_scores$alpha, 2)),
+  t(round(relationships_subscale_scores$alpha, 2)),
+  t(round(rosenberg_scores$alpha, 2))
 )
-
-alphas <- round(alphas, 2)
 
 # Summary statistics
 summary <- describe(select(attachment_final, social_anxiety:rosenberg))
 
 # Label sample size 
 n <- (describe(attachment_final))[1,2]
+
+n1 <- (describe(attachment_clean))[1,2]
 
 Scales <- c(
   "Social Interaction Anxiety Scale",
@@ -228,13 +228,13 @@ print(gttable.3)
 
 ### Participants
 
-In this data set there were `{r} n` participants, with varying distributions of education type (Table 1).
+In this data set there were `{r} n1` participants, with varying distributions of relationship status (Table 1).
 
 `{r} gttable`
 
 ### Measures
 
-In this Attachment and social anxiety dataset, there are responses to three scales. They are 1) The Social Interaction Anxiety Scale which measures individual's anxiety during social interaction (Cronbach's alpha = `{r} alphas[1]`). 2) The subscale of the Experiences in Close Relationships Scale which measures individual's anxiety in relationships (Cronbach's alpha = `{r} alphas[2]`). 3) The Rosenberg Self-Esteem Scale which measures self-worth (Cronbach's alpha = `{r} alphas[3]`). 
+In this Attachment and social anxiety dataset, there are responses to three scales. The Social Interaction Anxiety Scale which measures individual's anxiety during social interaction (Cronbach's alpha = `{r} alphas[1]`). The subscale of the Experiences in Close Relationships Scale which measures individual's anxiety in relationships (Cronbach's alpha = `{r} alphas[2]`). Lastly, the Rosenberg Self-Esteem Scale which measures self-worth (Cronbach's alpha = `{r} alphas[3]`). 
 
 ### Data Analysis Strategy
 
@@ -249,7 +249,7 @@ This table (Table 2) presents the mean, median, standard deviation, range, and C
 `{r} gttable.3`
 
 
-This table (Table 3) presents the mean, median, standard deviation, range, and Cronbach’s alpha for each scale, this time, the data are filtered to only show responses from Female participants. Female participants had a mean social interaction anxiety score of `{r} filt_summary[1,2]`, a mean relationship anxiety score of `{r} filt_summary[2,2]`, and a mean self-esteem score of `{r} filt_summary[3,2]`.
+This table (Table 3) presents the mean, median, standard deviation, range, and Cronbach’s alpha for each scale, except this time, the data are filtered to only show responses from female participants. Female participants had a mean social interaction anxiety score of `{r} filt_summary[1,2]`, a mean relationship anxiety score of `{r} filt_summary[2,2]`, and a mean self-esteem score of `{r} filt_summary[3,2]`.
 
 
 ## Discussion
